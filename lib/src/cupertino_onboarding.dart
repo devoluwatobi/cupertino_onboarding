@@ -1,8 +1,7 @@
 // Flutter imports:
-import 'package:flutter/cupertino.dart';
-
 // Package imports:
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:flutter/cupertino.dart';
 
 // Estimated from the iPhone Simulator running iOS 15
 final CupertinoDynamicColor _kBackgroundColor =
@@ -44,13 +43,16 @@ class CupertinoOnboarding extends StatefulWidget {
     required this.pages,
     this.backgroundColor,
     this.bottomButtonChild = const Text('Continue'),
+    this.bottomButton2Child = const Text('Close'),
     this.bottomButtonColor,
+    this.bottomButton2Color,
     this.bottomButtonBorderRadius,
     this.bottomButtonPadding = _kBottomButtonPadding,
     this.widgetAboveBottomButton,
     this.pageTransitionAnimationDuration = const Duration(milliseconds: 500),
     this.pageTransitionAnimationCurve = Curves.easeInOut,
     this.onPressed,
+    this.onPressed2,
     this.onPressedOnLastPage,
     super.key,
   }) : assert(
@@ -74,11 +76,14 @@ class CupertinoOnboarding extends StatefulWidget {
   /// Default to the Text('Continue') widget.
   final Widget bottomButtonChild;
 
+  final Widget bottomButton2Child;
+
   /// Background color of the bottom button.
   ///
   /// Default color is derived
   /// from the [CupertinoTheme]'s primaryColor.
   final Color? bottomButtonColor;
+  final Color? bottomButton2Color;
 
   /// Border radius of the next button.
   ///
@@ -111,6 +116,7 @@ class CupertinoOnboarding extends StatefulWidget {
   ///
   /// By default, it will navigate to the next page.
   final VoidCallback? onPressed;
+  final VoidCallback? onPressed2;
 
   /// Invoked when the user taps on the bottom button on the last page.
   /// Must not be null to be active.
@@ -182,28 +188,60 @@ class _CupertinoOnboardingState extends State<CupertinoOnboarding> {
                 padding: widget.bottomButtonPadding,
                 child: Column(
                   children: [
-                    CupertinoButton(
-                      borderRadius: widget.bottomButtonBorderRadius ??
-                          _bottomButtonBorderRadius,
-                      color: widget.bottomButtonColor ??
-                          CupertinoTheme.of(context).primaryColor,
-                      padding: const EdgeInsets.all(16),
-                      onPressed: _currentPage == widget.pages.length - 1
-                          ? widget.onPressedOnLastPage
-                          : widget.onPressed ?? _animateToNextPage,
-                      child: DefaultTextStyle(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoButton(
+                            borderRadius: widget.bottomButtonBorderRadius ??
+                                _bottomButtonBorderRadius,
+                            color: widget.bottomButtonColor ??
+                                CupertinoTheme.of(context).primaryColor,
+                            padding: const EdgeInsets.all(16),
+                            onPressed: _currentPage == widget.pages.length - 1
+                                ? widget.onPressedOnLastPage
+                                : widget.onPressed ?? _animateToNextPage,
+                            child: DefaultTextStyle(
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  widget.bottomButtonChild,
+                                  const Spacer(),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            const Spacer(),
-                            widget.bottomButtonChild,
-                            const Spacer(),
-                          ],
+                        const SizedBox(
+                          width: 10,
                         ),
-                      ),
+                        Expanded(
+                          child: CupertinoButton(
+                            borderRadius: widget.bottomButtonBorderRadius ??
+                                _bottomButtonBorderRadius,
+                            color: widget.bottomButton2Color ??
+                                CupertinoTheme.of(context).primaryColor,
+                            padding: const EdgeInsets.all(16),
+                            onPressed: widget.onPressed2 ?? _animateToNextPage,
+                            child: DefaultTextStyle(
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  widget.bottomButton2Child,
+                                  const Spacer(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
